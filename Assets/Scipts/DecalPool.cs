@@ -94,7 +94,10 @@ public class DecalPool : MonoBehaviour
         GameState.OnStateChanged -= OnStateChanged;
     }
 
-
+    public void DeleteParticles()
+    {
+        StartCoroutine("CleanParticles");
+    }
 
     private IEnumerator CleanParticles()
     {
