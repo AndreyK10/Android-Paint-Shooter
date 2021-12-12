@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 public class ScoreCounter : MonoBehaviour
 {
@@ -10,7 +10,7 @@ public class ScoreCounter : MonoBehaviour
     [SerializeField]
     private GameState GameState;
     [SerializeField]
-    private Text text, hs;
+    private TextMeshProUGUI _scoreText, _highscoreText;
 
     public int Score { get; private set; }
 
@@ -25,7 +25,7 @@ public class ScoreCounter : MonoBehaviour
         if (gameMode == GameState.GameMode.ScoreMode)
         {
             ResetCounter();
-            UpdateCounter(text, Score);
+            UpdateCounter(_scoreText, Score);
         }
         else if (gameMode == GameState.GameMode.Lose)
         {
@@ -33,11 +33,11 @@ public class ScoreCounter : MonoBehaviour
             if (Score > PlayerPrefs.GetInt("HS"))
             {
                 PlayerPrefs.SetInt("HS", Score);
-                UpdateCounter(hs, Score);
+                UpdateCounter(_highscoreText, Score);
             }
             else
             {
-                UpdateCounter(hs, PlayerPrefs.GetInt("HS"));
+                UpdateCounter(_highscoreText, PlayerPrefs.GetInt("HS"));
             }
         } 
         else
@@ -52,7 +52,7 @@ public class ScoreCounter : MonoBehaviour
         if (targetType == Target.TargetType.ScoreTarget)
         {
             Score += value;
-            UpdateCounter(text, Score);
+            UpdateCounter(_scoreText, Score);
         }
     }
     private void ResetCounter()
@@ -60,7 +60,7 @@ public class ScoreCounter : MonoBehaviour
         Score = 0;
     }
 
-    private void UpdateCounter(Text text, int value)
+    private void UpdateCounter(TextMeshProUGUI text, int value)
     {
         text.text = value.ToString();
     }

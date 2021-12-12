@@ -7,8 +7,6 @@ public class HitTarget : MonoBehaviour
     public delegate void TargetHit(Target.TargetType targetType ,int value);
     public event TargetHit OnTargetHit;
 
-
-
     private void OnParticleCollision(GameObject other)
     {
         if (other.TryGetComponent(out Target target))

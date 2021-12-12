@@ -1,14 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIController : MonoBehaviour
 {
     [SerializeField]
     private GameState GameState;
 
-    public Text ScoreText, HighscoreText, HealthText;
+    public TextMeshProUGUI ScoreText, HighscoreText, HealthText;
     public Button FreeModeButton, ScoreModeButton, MenuButton;
 
     private void OnEnable()
@@ -58,11 +57,11 @@ public class UIController : MonoBehaviour
         }
     }
 
-    private void ShowCounter(Text text)
+    private void ShowCounter(TextMeshProUGUI text)
     {
         text.gameObject.SetActive(true);
     }
-    private void HideCounter(Text text)
+    private void HideCounter(TextMeshProUGUI text)
     {
         text.gameObject.SetActive(false);
     }

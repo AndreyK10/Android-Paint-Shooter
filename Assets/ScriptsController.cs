@@ -19,11 +19,11 @@ public class ScriptsController : MonoBehaviour
     {
         if (gameMode == GameState.GameMode.Menu || gameMode == GameState.GameMode.Lose)
         {
-            SwithcLauncher(false);
+            SwitchLauncher();
         }
         else if (gameMode == GameState.GameMode.FreeMode || gameMode == GameState.GameMode.ScoreMode)
         {
-            SwithcLauncher(true);
+            StartCoroutine(SwitchLauncher(true));
         }
     }
 
@@ -32,9 +32,14 @@ public class ScriptsController : MonoBehaviour
         GameState.OnStateChanged -= OnStateChanged;
     }
 
-
-    private void SwithcLauncher(bool launcher)
+    private void SwitchLauncher()
     {
+        Launcher.enabled = false;
+    }
+
+    private IEnumerator SwitchLauncher(bool launcher)
+    {
+        yield return new WaitForSeconds(2f);
         Launcher.enabled = launcher;
     }
 

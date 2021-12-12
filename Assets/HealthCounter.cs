@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 public class HealthCounter : MonoBehaviour
 {
@@ -15,7 +13,7 @@ public class HealthCounter : MonoBehaviour
 
 
     [SerializeField]
-    private Text text;
+    private TextMeshProUGUI _healthText;
     private int _health;
     public int Health;
 
@@ -53,7 +51,7 @@ public class HealthCounter : MonoBehaviour
 
     private void UpdateHealth()
     {
-        text.text = _health.ToString();
+        _healthText.text = _health.ToString();
     }
 
 

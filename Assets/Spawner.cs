@@ -38,7 +38,7 @@ public class Spawner : MonoBehaviour
     {
         if (gameMode == GameState.GameMode.ScoreMode)
         {
-            StartCoroutine("StartSpawning", 2f);
+            StartCoroutine("StartSpawning");
 
         }
         else
@@ -54,6 +54,7 @@ public class Spawner : MonoBehaviour
 
     private IEnumerator StartSpawning()
     {
+        yield return new WaitForSeconds(3f);
         while (true)
         {
             Target target = _tempTargets[(Random.Range(0, _tempTargets.Length))];
