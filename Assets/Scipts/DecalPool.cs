@@ -15,8 +15,25 @@ public class DecalPool : MonoBehaviour
 
     private Vector3 particleRotationEuler;
 
+    [SerializeField]
+    private GameState GameState;
+
+    private void OnEnable()
+    {
+        GameState.OnStateChanged += OnStateChanged;
+    }
+
+    private void OnStateChanged(GameState.GameMode gameMode)
+    {
+        if (gameMode != GameState.GameMode.Lose)
+        {
+            StartCoroutine("CleanParticles");
+        }
+    }
+
     private void Start()
     {
+
         _decalParticleSystem = GetComponent<ParticleSystem>();
 
         if (MaxDecals > _decalParticleSystem.main.maxParticles)
@@ -71,5 +88,23 @@ public class DecalPool : MonoBehaviour
         }
         _decalParticleSystem.SetParticles(_particles, _particles.Length);
     }
+
+    private void OnDisable()
+    {
+        GameState.OnStateChanged -= OnStateChanged;
+    }
+
+
+
+    private IEnumerator CleanParticles()
+    {
+        yield return new WaitForEndOfFrame();
+        _decalParticleSystem.Clear();
+        for (int i = 0; i < MaxDecals; i++)
+        {
+            _decalData[i] = new DecalData();
+        }
+    }
+
 
 }

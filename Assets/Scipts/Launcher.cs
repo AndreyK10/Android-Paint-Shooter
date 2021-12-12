@@ -21,40 +21,44 @@ public class Launcher : MonoBehaviour
 
     public DecalPool decalPool;
 
+
     private void Start()
     {
         _collisionEvents = new List<ParticleCollisionEvent>();
     }
 
     private void Update()
-    {       
-        
-            if (Input.GetMouseButton(0))
+    {
+        if (Input.GetMouseButton(0))
+        {
+            var ray = _camera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
             {
-                var ray = _camera.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit))
+                Debug.DrawLine(ray.origin, hit.point);
+                transform.LookAt(hit.point);
+                _time += Time.deltaTime;
+                if (_time >= _timeLimit)
                 {
-                    Debug.DrawLine(ray.origin, hit.point);
-                    transform.LookAt(hit.point);
-                    _time += Time.deltaTime;
-                    if (_time >= _timeLimit)
-                    {
-                        _time = 0f;
+                    _time = 0f;
                     EmitMainParticles();
-                    }
                 }
-            }       
-       
+            }
+        }
+
     }
     private void OnParticleCollision(GameObject other)
     {
-        ParticlePhysicsExtensions.GetCollisionEvents(_particleLauncher, other, _collisionEvents);
 
-        for (int i = 0; i < _collisionEvents.Count; i++)
+        if (other.TryGetComponent(out Environment environment))
         {
-            decalPool.ParticleHit(_collisionEvents[i], ParticleColorGradient);
-            EmitAtLocation(_collisionEvents[i]);
+            ParticlePhysicsExtensions.GetCollisionEvents(_particleLauncher, other, _collisionEvents);
+
+            for (int i = 0; i < _collisionEvents.Count; i++)
+            {
+                decalPool.ParticleHit(_collisionEvents[i], ParticleColorGradient);
+                EmitAtLocation(_collisionEvents[i]);
+            }
         }
     }
 
@@ -81,4 +85,6 @@ public class Launcher : MonoBehaviour
         ParticleSystem.MainModule psMain = particleSystem.main;
         psMain.startColor = ParticleColorGradient.Evaluate(Random.Range(0f, 1f));
     }
+
+
 }
