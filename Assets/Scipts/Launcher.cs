@@ -21,6 +21,24 @@ public class Launcher : MonoBehaviour
 
     public DecalPool decalPool;
 
+    [SerializeField]
+    private GameState GameState;
+    private bool canShoot;
+    private void OnEnable()
+    {
+        GameState.OnStateChanged += OnStateChanged;
+    }
+    private void OnStateChanged(GameState.GameMode gameMode)
+    {
+        if (gameMode == GameState.GameMode.Menu || gameMode == GameState.GameMode.Lose)
+        {
+            canShoot = false;
+        }
+        else
+        {
+            canShoot = true;
+        }
+    }
 
     private void Start()
     {
@@ -29,23 +47,25 @@ public class Launcher : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButton(0))
+        if (canShoot)
         {
-            var ray = _camera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
+            if (Input.GetMouseButton(0))
             {
-                Debug.DrawLine(ray.origin, hit.point);
-                transform.LookAt(hit.point);
-                _time += Time.deltaTime;
-                if (_time >= _timeLimit)
+                var ray = _camera.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit))
                 {
-                    _time = 0f;
-                    EmitMainParticles();
+                    Debug.DrawLine(ray.origin, hit.point);
+                    transform.LookAt(hit.point);
+                    _time += Time.deltaTime;
+                    if (_time >= _timeLimit)
+                    {
+                        _time = 0f;
+                        EmitMainParticles();
+                    }
                 }
             }
         }
-
     }
     private void OnParticleCollision(GameObject other)
     {
@@ -86,5 +106,8 @@ public class Launcher : MonoBehaviour
         psMain.startColor = ParticleColorGradient.Evaluate(Random.Range(0f, 1f));
     }
 
-
+    private void OnDisable()
+    {
+        GameState.OnStateChanged -= OnStateChanged;
+    }
 }

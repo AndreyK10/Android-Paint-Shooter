@@ -10,7 +10,7 @@ public class ScoreCounter : MonoBehaviour
     [SerializeField]
     private GameState GameState;
     [SerializeField]
-    private TextMeshProUGUI _scoreText, _highscoreText;
+    private TextMeshProUGUI _scoreText, _highscoreText, _highscoreMenuText;
 
     public int Score { get; private set; }
 
@@ -19,7 +19,10 @@ public class ScoreCounter : MonoBehaviour
         HitTarget.OnTargetHit += OnTargetHit;
         GameState.OnStateChanged += OnStateChanged;
     }
-
+    private void Start()
+    {
+        UpdateHighscore(_highscoreMenuText, PlayerPrefs.GetInt("HS"));
+    }
     private void OnStateChanged(GameState.GameMode gameMode)
     {
         if (gameMode == GameState.GameMode.ScoreMode)
@@ -33,11 +36,12 @@ public class ScoreCounter : MonoBehaviour
             if (Score > PlayerPrefs.GetInt("HS"))
             {
                 PlayerPrefs.SetInt("HS", Score);
-                UpdateCounter(_highscoreText, Score);
+                UpdateHighscore(_highscoreText, Score);
+                UpdateHighscore(_highscoreMenuText, Score);
             }
             else
             {
-                UpdateCounter(_highscoreText, PlayerPrefs.GetInt("HS"));
+                UpdateHighscore(_highscoreText, PlayerPrefs.GetInt("HS"));
             }
         } 
         else
@@ -63,6 +67,11 @@ public class ScoreCounter : MonoBehaviour
     private void UpdateCounter(TextMeshProUGUI text, int value)
     {
         text.text = value.ToString();
+    }
+
+    private void UpdateHighscore(TextMeshProUGUI text, int value)
+    {
+        text.text = "HIGHSCORE: " + value.ToString();
     }
 
     private void OnDisable()

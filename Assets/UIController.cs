@@ -7,8 +7,8 @@ public class UIController : MonoBehaviour
     [SerializeField]
     private GameState GameState;
 
-    public TextMeshProUGUI ScoreText, HighscoreText, HealthText;
-    public Button FreeModeButton, ScoreModeButton, MenuButton;
+    public TextMeshProUGUI ScoreText, HighscoreText, HealthText, HighscoreMenuText;
+    public Button FreeModeButton, ScoreModeButton, MenuButton, RestartButton, MenuLoseButton;
 
     private void OnEnable()
     {
@@ -19,65 +19,41 @@ public class UIController : MonoBehaviour
     {
         if (gameMode == GameState.GameMode.Menu)
         {
-            HideCounter(HealthText);
-            HideCounter(HighscoreText);
-            HideCounter(ScoreText);
-            ShowButton(FreeModeButton);
-            ShowButton(ScoreModeButton);
-            HideButton(MenuButton);
-
+            SwitchCountersState(false, false, false, true);
+            SwitchButtonsState(true, true, false, false, false);
         }
         if (gameMode == GameState.GameMode.ScoreMode)
         {
-            ShowCounter(HealthText);
-            HideCounter(HighscoreText);
-            ShowCounter(ScoreText);
-            HideButton(FreeModeButton);
-            HideButton(ScoreModeButton);
-            ShowButton(MenuButton);
+            SwitchCountersState(true, false, true, false);
+            SwitchButtonsState(false, false, true, false, false);
         }
         if (gameMode == GameState.GameMode.FreeMode)
         {
-            HideCounter(HealthText);
-            HideCounter(HighscoreText);
-            HideCounter(ScoreText);
-            HideButton(FreeModeButton);
-            HideButton(ScoreModeButton);
-            ShowButton(MenuButton);
-
+            SwitchCountersState(false, false, false, false);
+            SwitchButtonsState(false, false, true, false, false);
         }
         if (gameMode == GameState.GameMode.Lose)
         {
-            HideCounter(HealthText);
-            ShowCounter(HighscoreText);
-            ShowCounter(ScoreText);
-            HideButton(FreeModeButton);
-            HideButton(ScoreModeButton);
-            ShowButton(MenuButton);
+            SwitchCountersState(true, true, false, false);
+            SwitchButtonsState(false, false, false, true, true);
         }
     }
 
-    private void ShowCounter(TextMeshProUGUI text)
+    private void SwitchCountersState(bool score, bool highscore, bool health, bool highscoreMenu)
     {
-        text.gameObject.SetActive(true);
-    }
-    private void HideCounter(TextMeshProUGUI text)
-    {
-        text.gameObject.SetActive(false);
-    }
-    private void ShowUIGroup()
-    {
-
+        ScoreText.gameObject.SetActive(score);
+        HighscoreText.gameObject.SetActive(highscore);
+        HealthText.gameObject.SetActive(health);
+        HighscoreMenuText.gameObject.SetActive(highscoreMenu);
     }
 
-    private void ShowButton(Button button)
+    private void SwitchButtonsState(bool scoreMode, bool freeMode, bool menu, bool restart, bool menuLose)
     {
-        button.gameObject.SetActive(true);
-    }
-
-    private void HideButton(Button button)
-    {
-        button.gameObject.SetActive(false);
+        FreeModeButton.gameObject.SetActive(freeMode);
+        ScoreModeButton.gameObject.SetActive(scoreMode);
+        MenuButton.gameObject.SetActive(menu);
+        RestartButton.gameObject.SetActive(restart);
+        MenuLoseButton.gameObject.SetActive(menuLose);
     }
 
     private void OnDisable()
